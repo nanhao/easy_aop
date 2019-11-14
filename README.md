@@ -14,8 +14,10 @@ make install
 ```
 
 Add the following lines to your php.ini
+```bash
 [phpaop]
 extension=phpaop.so
+```
 
 ## Usage
 ```php
