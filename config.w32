@@ -1,0 +1,7 @@
+ARG_ENABLE('phpaop', 'phpaop support', 'no');
+
+if (PHP_PHPAOP != 'no') {
+	AC_DEFINE('HAVE_PHPAOP', 1, 'phpaop support enabled');
+
+	EXTENSION('phpaop', 'phpaop.c', null, '/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1');
+}
