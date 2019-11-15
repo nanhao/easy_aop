@@ -1,5 +1,5 @@
 # phpaop
-Phpaop is a simple php7 extension for AOP (Aspect Oriented Programming), which allow you to attach a piece of code before/after a method or function, in an easiest way.
+Phpaop is a simple php7 extension for AOP (Aspect Oriented Programming), which allow you to attach a piece of code before/after a method or function in the easiest way.
 
 ## What is AOP?
 Let's assume the following class:
@@ -53,7 +53,7 @@ By this way, we gain at least two advantages:
 - We extract the aspect, making it easier to maintain.
 - We keep the main logic of methods clean, which also make them easier to maintain.
 
-Logging is only one typical aspects. Other common aspects include access control and statistics.  
+Logging is only one typical aspect. Other common aspects include access control, statistics and so on.  
 
 ## Installation
 
@@ -93,7 +93,7 @@ after@class_name::method_name
 Before-advice is attached to the beginning of the target code, while after-advice is attached to the end of the target code.
 
 ## Before-advice
-Before-advice is executed **after** the caller call the callee and **before** the callee recieve the arguments, which means:
+Before-advice is executed **after** the caller calls the callee and **before** the callee receives the arguments, which means:
 ```php
 function sum($a, $b = 10) {
     return $a + $b;
@@ -116,11 +116,11 @@ array(2) {
 }
 NULL
 ```
-- Because the default value of $b is set when the callee recieve the arguments, we can't find $b in the $args array. In other words, $args represents arguments actually passed by the caller instead of that recieved by the callee.
+- Because the default value of $b is set when the callee receives the arguments, we can't find $b in the $args array. In other words, $args represents arguments actually passed by the caller instead of that recieved by the callee.
 - $ret is NULL due to obvious reasons.
 
 ## After-advice
-After-advice is executed **after** the return statement of the callee, So you can get the real return value by reading $ret. However, there is a special scenario under which $ret is set to NULL even the real return value is not NULL:
+After-advice is executed **after** the return statement of the callee, So you can get the real return value by reading $ret. However, there is a particular scenario under which $ret is set to NULL even when the real return value seems not NULL:
 ```php
 function sum($a, $b) {
     return $a + $b;
@@ -149,7 +149,7 @@ function sum($a, $b) {
 
 sum(1, 2);
 ```
-- PHPAOP::add_advice **should** be called before the target code execute:
+- PHPAOP::add_advice **should** be called before the target code's execution:
 ```php
 // bad. advice will not run
 function sum($a, $b) {
@@ -163,7 +163,7 @@ PHPAOP::add_advice(['after@sum'], function($joinpoint, $args, $ret) {
 });
 ``` 
 
-## Notice: the execution of an advice may trigger another advice. 
+## The execution of an advice may trigger another advice. 
 Consider the following code:
 ```php
 PHPAOP::add_advice(['after@sum'], function($joinpoint, $args, $ret) {
