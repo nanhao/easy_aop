@@ -13,8 +13,8 @@ Phpaop is a simple php7 extension for AOP (Aspect Oriented Programming), which a
 [The execution of an advice may trigger another advice](#the-execution-of-an-advice-may-trigger-another-advice)  
 [Advice recursion](#advice-recursion)  
 [Namespace](#namespace)  
-[arguments passing by reference](#arguments-passing-by-reference)  
-[returning reference](#returning-reference)  
+[Arguments passing by reference](#arguments-passing-by-reference)  
+[Returning reference](#returning-reference)  
 
 ## What is AOP?
 Let's assume the following class:
@@ -248,7 +248,7 @@ Output:
 after@A\sum called
 ```
 
-## arguments passing by reference
+## Arguments passing by reference
 ```php
 function test(&$a) {
     $a++;
@@ -267,7 +267,7 @@ Output:
 int(3)
 ```
 
-## returning reference
+## Returning reference
 ```php
 function &test() {
     global $a;
