@@ -1,6 +1,6 @@
 #include "AopManager.h"
 
-namespace PHPAOP
+namespace easy_aop
 {
     using std::pair;
 

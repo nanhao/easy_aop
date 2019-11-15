@@ -1,14 +1,14 @@
 #ifndef __AOPEXTENSION_H__
 #define __AOPEXTENSION_H__
 
-#include "php_phpaop.h"
+#include "php_easy_aop.h"
 #include "php_internal.h"
 #include <string>
 #include <vector>
 
-#define PHPAOP_FUNCTIONS
+#define EASY_AOP_FUNCTIONS
 
-namespace PHPAOP
+namespace easy_aop
 {
     using std::string;
     using std::vector;
@@ -24,7 +24,7 @@ namespace PHPAOP
         static int hook_rshutdown();
         static void minfo();
 
-        ZEND_DLEXPORT static void phpaop_execute_ex(zend_execute_data* execute_data);
+        ZEND_DLEXPORT static void easy_aop_execute_ex(zend_execute_data* execute_data);
 
     private:
         static void register_classes();
@@ -32,7 +32,7 @@ namespace PHPAOP
         static void call_after(string func, vector<param_info>* p_param_infos, zval* p_result);
     };
 
-    void register_PHPAOP();
+    void register_EasyAop();
 }
 
 #endif

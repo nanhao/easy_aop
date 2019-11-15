@@ -1,8 +1,8 @@
 --TEST--
-PHPAOP::add_advice test : namespace
+EasyAop::add_advice test : namespace
 --SKIPIF--
 <?php
-if (!extension_loaded('phpaop')) {
+if (!extension_loaded('easy_aop')) {
     echo 'skip';
 }
 ?>
@@ -19,7 +19,7 @@ namespace A {
 }
 
 namespace B {
-    \PHPAOP::add_advice([
+    \EasyAop::add_advice([
         'after@A\Test::f',
     ], function($joinpoint, $args, $ret) {
         echo "after@Test::f called" . PHP_EOL;

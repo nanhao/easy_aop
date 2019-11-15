@@ -4,10 +4,10 @@
 #include <string>
 #include <vector>
 #include <map>
-#include "php_phpaop.h"
+#include "php_easy_aop.h"
 #include "Advice.h"
 
-namespace PHPAOP
+namespace easy_aop
 {
     using std::string;
     using std::map;

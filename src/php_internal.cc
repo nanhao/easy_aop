@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 
-namespace PHPAOP
+namespace easy_aop
 {
     using std::vector;
     using std::string;

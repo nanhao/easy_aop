@@ -1,7 +1,7 @@
-ARG_ENABLE('phpaop', 'phpaop support', 'no');
+ARG_ENABLE('easy_aop', 'easy_aop support', 'no');
 
-if (PHP_PHPAOP != 'no') {
-	AC_DEFINE('HAVE_PHPAOP', 1, 'phpaop support enabled');
+if (PHP_EASY_AOP != 'no') {
+	AC_DEFINE('HAVE_EASY_AOP', 1, 'easy_aop support enabled');
 
-	EXTENSION('phpaop', 'phpaop.c', null, '/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1');
+	EXTENSION('easy_aop', 'easy_aop.c', null, '/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1');
 }

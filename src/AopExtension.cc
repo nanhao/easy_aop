@@ -2,14 +2,14 @@
 #include "AopManager.h"
 #include "php_internal.h"
 
-namespace PHPAOP
+namespace easy_aop
 {
     void (*AopExtension::ori_zend_execute_ex) (zend_execute_data *execute_data) = zend_execute_ex;
 
     int AopExtension::hook_minit()
     {
         AopExtension::register_classes();
-        zend_execute_ex = AopExtension::phpaop_execute_ex;
+        zend_execute_ex = AopExtension::easy_aop_execute_ex;
         return SUCCESS;
     }
 
@@ -21,26 +21,26 @@ namespace PHPAOP
 
     int AopExtension::hook_rinit()
     {
-        PHPAOP_G(p_manager) = (void*)new AopManager();
+        EASY_AOP_G(p_manager) = (void*)new AopManager();
         return SUCCESS;
     }
 
     int AopExtension::hook_rshutdown()
     {
-        delete (PHPAOP::AopManager*)PHPAOP_G(p_manager);
+        delete (easy_aop::AopManager*)EASY_AOP_G(p_manager);
         return SUCCESS;
     }
 
     void AopExtension::minfo()
     {
         php_info_print_table_start();
-        php_info_print_table_header(2, "phpaop support", "enabled");
+        php_info_print_table_header(2, "easy_aop support", "enabled");
         php_info_print_table_end();
     }
 
-    ZEND_DLEXPORT void AopExtension::phpaop_execute_ex(zend_execute_data* execute_data)
+    ZEND_DLEXPORT void AopExtension::easy_aop_execute_ex(zend_execute_data* execute_data)
     {
-        string func = PHPAOP::get_function_name(execute_data);
+        string func = easy_aop::get_function_name(execute_data);
 
         if (func.empty()) {
             AopExtension::ori_zend_execute_ex(execute_data);
@@ -48,7 +48,7 @@ namespace PHPAOP
         }
 
         vector<param_info> param_infos;
-        PHPAOP::collect_params(&param_infos, execute_data);
+        easy_aop::collect_params(&param_infos, execute_data);
 
         zval* p_result = execute_data->return_value;
 
@@ -63,14 +63,14 @@ namespace PHPAOP
 
     void AopExtension::register_classes()
     {
-        register_PHPAOP();
+        register_EasyAop();
     }
 
     void AopExtension::call_before(string func, vector<param_info>* p_param_infos, zend_execute_data* execute_data)
     {
-        PHPAOP::AopManager* p_manager = ((PHPAOP::AopManager*)PHPAOP_G(p_manager));
+        easy_aop::AopManager* p_manager = ((easy_aop::AopManager*)EASY_AOP_G(p_manager));
 
-        vector<PHPAOP::Advice*>* p_advice_vector = p_manager->get_advice_before(func);
+        vector<easy_aop::Advice*>* p_advice_vector = p_manager->get_advice_before(func);
 
         for (auto it = p_advice_vector->begin(); it != p_advice_vector->end(); ++it) {
             zval params[3];
@@ -99,9 +99,9 @@ namespace PHPAOP
 
     void AopExtension::call_after(string func, vector<param_info>* p_param_infos, zval* p_result)
     {
-        PHPAOP::AopManager* p_manager = ((PHPAOP::AopManager*)PHPAOP_G(p_manager));
+        easy_aop::AopManager* p_manager = ((easy_aop::AopManager*)EASY_AOP_G(p_manager));
 
-        vector<PHPAOP::Advice*>* p_advice_vector = p_manager->get_advice_after(func);
+        vector<easy_aop::Advice*>* p_advice_vector = p_manager->get_advice_after(func);
 
         for (auto it = p_advice_vector->begin(); it != p_advice_vector->end(); ++it) {
             zval params[3];

@@ -1,5 +1,5 @@
-# phpaop
-Phpaop is a simple php7 extension for AOP (Aspect Oriented Programming), which allow you to attach a piece of code before/after a method or function in the easiest way.
+# easy_aop
+Easy_aop is a simple php7 extension for AOP (Aspect Oriented Programming), which allow you to attach a piece of code before/after a method or function in the easiest way.
 
 ## Document  
 
@@ -9,7 +9,7 @@ Phpaop is a simple php7 extension for AOP (Aspect Oriented Programming), which a
 [Two types of advice](#two-types-of-advice)  
 [Before-advice](#before-advice)  
 [After-advice](#after-advice)  
-[When to call PHPAOP::add_advice](#when-to-call-phpaopadd_advice)  
+[When to call EasyAop::add_advice](#when-to-call-easy_aopadd_advice)  
 [The execution of an advice may trigger another advice](#the-execution-of-an-advice-may-trigger-another-advice)  
 [Advice recursion](#advice-recursion)  
 [Namespace](#namespace)  
@@ -56,14 +56,14 @@ class MyClass
     }
 }
 
-PHPAOP::add_advice([
+EasyAop::add_advice([
     'before@MyClass::method1',
     'before@MyClass::method2',
 ], function() {
     log();
 });
 ```
-With codes above, we put the log aspect in a single place, writing log() only once. PHPAOP::add_advice() will magically attach it to the beginning of method1 and method2.  
+With codes above, we put the log aspect in a single place, writing log() only once. EasyAop::add_advice() will magically attach it to the beginning of method1 and method2.  
 By this way, we gain at least two advantages:
 - We extract the aspect, making it easier to maintain.
 - We keep the main logic of methods clean, which also make them easier to maintain.
@@ -73,8 +73,8 @@ Logging is only one typical aspect. Other common aspects include access control,
 ## Installation
 
 ```bash
-git clone https://github.com/nanhao/phpaop.git
-cd phpaop
+git clone https://github.com/nanhao/easy_aop.git
+cd easy_aop
 phpize
 ./configure
 make
@@ -84,13 +84,13 @@ make install
 
 Add the following lines to your php.ini
 ```bash
-[phpaop]
-extension=phpaop.so
+[easy_aop]
+extension=easy_aop.so
 ```
 
 ## Usage
 ```php
-PHPAOP::add_advice([
+EasyAop::add_advice([
     'before@class_name::method_name',
     'after@class_name::method_name',
     'before@function_name',
@@ -114,7 +114,7 @@ function sum($a, $b = 10) {
     return $a + $b;
 }
 
-PHPAOP::add_advice(['before@sum'], function($joinpoint, $args, $ret) {
+EasyAop::add_advice(['before@sum'], function($joinpoint, $args, $ret) {
     var_dump($joinpoint);
     var_dump($args);
     var_dump($ret);
@@ -141,7 +141,7 @@ function sum($a, $b) {
     return $a + $b;
 }
 
-PHPAOP::add_advice(['after@sum'], function($joinpoint, $args, $ret) {
+EasyAop::add_advice(['after@sum'], function($joinpoint, $args, $ret) {
     var_dump($ret);
 });
 
@@ -150,11 +150,11 @@ sum(1, 2);
 The above code output NULL instead of 3. The reason is:
 - The return value of sum(1, 2) is not assigned to other variables. It's unused, so the underlying engine of php discards the return value on optimization purpose.
 
-## When to call PHPAOP::add_advice?
-- PHPAOP::add_advice **can** be called before the target code's definition:
+## When to call EasyAop::add_advice?
+- EasyAop::add_advice **can** be called before the target code's definition:
 ```php
 // ok
-PHPAOP::add_advice(['after@sum'], function($joinpoint, $args, $ret) {
+EasyAop::add_advice(['after@sum'], function($joinpoint, $args, $ret) {
     var_dump($ret);
 });
 
@@ -164,7 +164,7 @@ function sum($a, $b) {
 
 sum(1, 2);
 ```
-- PHPAOP::add_advice **should** be called before the target code's execution:
+- EasyAop::add_advice **should** be called before the target code's execution:
 ```php
 // bad. advice will not run
 function sum($a, $b) {
@@ -173,7 +173,7 @@ function sum($a, $b) {
 
 sum(1, 2);
 
-PHPAOP::add_advice(['after@sum'], function($joinpoint, $args, $ret) {
+EasyAop::add_advice(['after@sum'], function($joinpoint, $args, $ret) {
     var_dump($ret);
 });
 ``` 
@@ -181,12 +181,12 @@ PHPAOP::add_advice(['after@sum'], function($joinpoint, $args, $ret) {
 ## The execution of an advice may trigger another advice. 
 Consider the following code:
 ```php
-PHPAOP::add_advice(['after@sum'], function($joinpoint, $args, $ret) {
+EasyAop::add_advice(['after@sum'], function($joinpoint, $args, $ret) {
     echo "after@sum called";
     div(10, 2);
 });
 
-PHPAOP::add_advice(['after@div'], function($joinpoint, $args, $ret) {
+EasyAop::add_advice(['after@div'], function($joinpoint, $args, $ret) {
     echo "after@div called";
 });
 
@@ -211,7 +211,7 @@ after@div called
 ## Advice recursion
 Consider the following code:
 ```php
-PHPAOP::add_advice(['after@sum'], function($joinpoint, $args, $ret) {
+EasyAop::add_advice(['after@sum'], function($joinpoint, $args, $ret) {
     sum(3, 4);
 });
 
@@ -236,7 +236,7 @@ namespace A {
 }
 
 namespace B {
-    \PHPAOP::add_advice(['after@A\sum'], function($joinpoint, $args, $ret) {
+    \EasyAop::add_advice(['after@A\sum'], function($joinpoint, $args, $ret) {
         echo "after@A\sum called" . PHP_EOL;
     });
     
@@ -254,7 +254,7 @@ function test(&$a) {
     $a++;
 }
 
-PHPAOP::add_advice(['after@test'], function($joinpoint, $args, $ret) {
+EasyAop::add_advice(['after@test'], function($joinpoint, $args, $ret) {
     $args['a']++;
 });
 
@@ -274,7 +274,7 @@ function &test() {
     return $a;
 }
 
-PHPAOP::add_advice(['after@test'], function($joinpoint, $args, &$ret) {
+EasyAop::add_advice(['after@test'], function($joinpoint, $args, &$ret) {
     $ret++;
 });
 

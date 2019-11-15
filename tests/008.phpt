@@ -1,8 +1,8 @@
 --TEST--
-PHPAOP::add_advice test : returning reference
+EasyAop::add_advice test : returning reference
 --SKIPIF--
 <?php
-if (!extension_loaded('phpaop')) {
+if (!extension_loaded('easy_aop')) {
     echo 'skip';
 }
 ?>
@@ -13,7 +13,7 @@ function &test() {
     return $a;
 }
 
-PHPAOP::add_advice(['after@test'], function($joinpoint, $args, &$ret) {
+EasyAop::add_advice(['after@test'], function($joinpoint, $args, &$ret) {
     $ret++;
 });
 

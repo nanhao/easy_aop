@@ -1,14 +1,14 @@
 --TEST--
-PHPAOP::add_advice Basic test : before advice
+EasyAop::add_advice Basic test : before advice
 --SKIPIF--
 <?php
-if (!extension_loaded('phpaop')) {
+if (!extension_loaded('easy_aop')) {
 	echo 'skip';
 }
 ?>
 --FILE--
 <?php
-PHPAOP::add_advice([
+EasyAop::add_advice([
     'before@Test::f',
 ], function($joinpoint, $args, $ret) {
     echo "before@Test::f called" . PHP_EOL;

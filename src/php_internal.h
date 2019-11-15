@@ -1,11 +1,11 @@
 #ifndef __INTERNAL_H__
 #define __INTERNAL_H__
 
-#include "php_phpaop.h"
+#include "php_easy_aop.h"
 #include <string>
 #include <vector>
 
-namespace PHPAOP
+namespace easy_aop
 {
     using std::string;
     using std::vector;

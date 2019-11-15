@@ -1,20 +1,20 @@
 --TEST--
-PHPAOP::add_advice test : add multi times
+EasyAop::add_advice test : add multi times
 --SKIPIF--
 <?php
-if (!extension_loaded('phpaop')) {
+if (!extension_loaded('easy_aop')) {
     echo 'skip';
 }
 ?>
 --FILE--
 <?php
-PHPAOP::add_advice([
+EasyAop::add_advice([
     'after@Test::f',
 ], function($joinpoint, $args, $ret) {
     echo "after1@Test::f called" . PHP_EOL;
 });
 
-PHPAOP::add_advice([
+EasyAop::add_advice([
     'after@Test::f',
 ], function($joinpoint, $args, $ret) {
     echo "after2@Test::f called" . PHP_EOL;

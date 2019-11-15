@@ -1,6 +1,6 @@
 #include "Advice.h"
 
-namespace PHPAOP
+namespace easy_aop
 {
     Advice::Advice(zend_fcall_info fci, zend_fcall_info_cache fcc, zval* closure)
     {

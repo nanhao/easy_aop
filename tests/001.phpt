@@ -1,14 +1,14 @@
 --TEST--
-Check if phpaop is loaded
+Check if easy_aop is loaded
 --SKIPIF--
 <?php
-if (!extension_loaded('phpaop')) {
+if (!extension_loaded('easy_aop')) {
 	echo 'skip';
 }
 ?>
 --FILE--
 <?php
-echo 'The extension "phpaop" is available';
+echo 'The extension "easy_aop" is available';
 ?>
 --EXPECT--
-The extension "phpaop" is available
+The extension "easy_aop" is available

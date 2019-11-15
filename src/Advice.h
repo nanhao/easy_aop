@@ -1,11 +1,11 @@
 #ifndef __ADVICE_H__
 #define __ADVICE_H__
 
-#include "php_phpaop.h"
+#include "php_easy_aop.h"
 #include <string>
 using std::string;
 
-namespace PHPAOP
+namespace easy_aop
 {
     class Advice
     {

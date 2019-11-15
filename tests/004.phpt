@@ -1,14 +1,14 @@
 --TEST--
-PHPAOP::add_advice test : advice in advice
+EasyAop::add_advice test : advice in advice
 --SKIPIF--
 <?php
-if (!extension_loaded('phpaop')) {
+if (!extension_loaded('easy_aop')) {
     echo 'skip';
 }
 ?>
 --FILE--
 <?php
-PHPAOP::add_advice([
+EasyAop::add_advice([
     'after@Test1::f',
 ], function($joinpoint, $args, $ret) {
     echo "after@Test1::f called" . PHP_EOL;
@@ -16,7 +16,7 @@ PHPAOP::add_advice([
     $t->f();
 });
 
-PHPAOP::add_advice([
+EasyAop::add_advice([
     'after@Test2::f',
 ], function($joinpoint, $args, $ret) {
     echo "after@Test2::f called" . PHP_EOL;
