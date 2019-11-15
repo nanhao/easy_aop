@@ -65,7 +65,7 @@ namespace PHPAOP
         while (i < op_array->last_var) {
             if (ZSTR_VAL(op_array->vars[i]) == ZSTR_VAL(name) ||
                 (ZSTR_H(op_array->vars[i]) == hash_value &&
-                 zend_string_equal_content(op_array->vars[i], name))) {
+                 zend_string_equals(op_array->vars[i], name))) {
                 return (int)(zend_intptr_t)ZEND_CALL_VAR_NUM(NULL, i);
             }
             i++;
