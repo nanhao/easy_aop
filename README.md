@@ -9,7 +9,7 @@ Easy_aop is a simple php7 extension for AOP (Aspect Oriented Programming), which
 [Two types of advice](#two-types-of-advice)  
 [Before-advice](#before-advice)  
 [After-advice](#after-advice)  
-[When to call EasyAop::add_advice](#when-to-call-easy_aopadd_advice)  
+[When to call EasyAop::add_advice](#when-to-call-easyaopadd_advice)  
 [The execution of an advice may trigger another advice](#the-execution-of-an-advice-may-trigger-another-advice)  
 [Advice recursion](#advice-recursion)  
 [Namespace](#namespace)  
