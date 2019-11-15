@@ -55,6 +55,10 @@ namespace PHPAOP
         AopExtension::call_before(func, &param_infos, execute_data);
         AopExtension::ori_zend_execute_ex(execute_data);
         AopExtension::call_after(func, &param_infos, p_result);
+
+        for (auto iter = param_infos.begin(); iter != param_infos.end(); ++iter) {
+            zval_ptr_dtor(&iter->val);
+        }
     }
 
     void AopExtension::register_classes()
@@ -79,7 +83,7 @@ namespace PHPAOP
             zend_hash_init(Z_ARRVAL(params[1]), 10, NULL, NULL, 0);
 
             for (auto iter = p_param_infos->begin(); iter != p_param_infos->end(); ++iter) {
-                zend_hash_update(Z_ARRVAL(params[1]), iter->name, iter->val);
+                zend_hash_update(Z_ARRVAL(params[1]), iter->name, &iter->val);
             }
 
             ZVAL_NULL(&params[2]);
@@ -110,7 +114,7 @@ namespace PHPAOP
             zend_hash_init(Z_ARRVAL(params[1]), 10, NULL, NULL, 0);
 
             for (auto iter = p_param_infos->begin(); iter != p_param_infos->end(); ++iter) {
-                zend_hash_update(Z_ARRVAL(params[1]), iter->name, iter->val);
+                zend_hash_update(Z_ARRVAL(params[1]), iter->name, &iter->val);
             }
 
             if (p_result != NULL) {

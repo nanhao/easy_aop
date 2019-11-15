@@ -167,6 +167,36 @@ PHPAOP::add_advice(['after@sum'], function($joinpoint, $args, $ret) {
 Consider the following code:
 ```php
 PHPAOP::add_advice(['after@sum'], function($joinpoint, $args, $ret) {
+    echo "after@sum called";
+    div(10, 2);
+});
+
+PHPAOP::add_advice(['after@div'], function($joinpoint, $args, $ret) {
+    echo "after@div called";
+});
+
+function sum($a, $b) {
+    echo "sum called";
+}
+
+function div($a, $b) {
+    echo "div called";
+}
+
+sum(1, 2);
+```
+Output:
+```text
+sum called
+after@sum called
+div called
+after@div called
+```
+
+## Advice recursion
+Consider the following code:
+```php
+PHPAOP::add_advice(['after@sum'], function($joinpoint, $args, $ret) {
     sum(3, 4);
 });
 
@@ -180,4 +210,65 @@ If you run the above script, it will cause a fetal error:
 ```text
 Fatal error: advice recursion detected: after@sum
 ```
-Phpaop is built with a mechanism that within an advice, another advice may be triggered. But, recursion is not allowed.
+
+## Namespace
+If the target code belongs to a namespace, you need to specify the qualified name of the target code relative to the global namespace:
+```php
+namespace A {
+    function sum($a, $b) {
+        return $a + $b;
+    }
+}
+
+namespace B {
+    \PHPAOP::add_advice(['after@A\sum'], function($joinpoint, $args, $ret) {
+        echo "after@A\sum called" . PHP_EOL;
+    });
+    
+    \A\sum(1, 2);
+}
+```
+Output:
+```text
+after@A\sum called
+```
+
+## arguments passing by reference
+```php
+function test(&$a) {
+    $a++;
+}
+
+PHPAOP::add_advice(['after@test'], function($joinpoint, $args, $ret) {
+    $args['a']++;
+});
+
+$a = 1;
+test($a);
+var_dump($a);
+```
+Output:
+```text
+int(3)
+```
+
+## returning reference
+```php
+function &test() {
+    global $a;
+    return $a;
+}
+
+PHPAOP::add_advice(['after@test'], function($joinpoint, $args, &$ret) {
+    $ret++;
+});
+
+$a = 1;
+$b = &test();
+$b++;
+var_dump($a);
+```
+Output:
+```text
+int(3)
+```

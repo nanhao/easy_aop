@@ -15,7 +15,7 @@ namespace PHPAOP
 
     typedef struct {
         zend_string* name;
-        zval* val;
+        zval val;
     } param_info;
 
     param_info get_param(zend_execute_data *execute_data, int index);

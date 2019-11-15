@@ -52,7 +52,7 @@ namespace PHPAOP
         zend_arg_info* p_arg_info = execute_data->func->common.arg_info;
         ret.name = (p_arg_info + index)->name;
         int offset = lookup_cv(&execute_data->func->op_array, ret.name);
-        ret.val = (zval*)((char*)execute_data + offset);
+        ZVAL_COPY(&ret.val, (zval*)((char*)execute_data + offset));
 
         return ret;
     }
