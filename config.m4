@@ -88,7 +88,7 @@ if test "$PHP_EASY_AOP" != "no"; then
     src/AopExtension.cc \
     src/Advice.cc"
 
-  PHP_NEW_EXTENSION(easy_aop, $easy_aop_source_file, $ext_shared)
+  PHP_NEW_EXTENSION(easy_aop, $easy_aop_source_file, $ext_shared,,, cxx)
 fi
 
 if test -z "$PHP_DEBUG"; then
