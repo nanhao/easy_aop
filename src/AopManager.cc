@@ -92,7 +92,7 @@ namespace easy_aop
         if (iter != _joinpoint_map.end()) {
             string err = "advice recursion detected: ";
             err += iter->first;
-            zend_error(E_ERROR, err.c_str());
+            zend_error(E_ERROR, "%s", err.c_str());
             return;
         }
 
