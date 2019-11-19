@@ -66,7 +66,7 @@ EasyAop::add_advice([
 With codes above, we put the log aspect in a single place, writing log() only once. EasyAop::add_advice() will magically attach it to the beginning of method1 and method2.  
 By this way, we gain at least two advantages:
 - We extract the aspect, making it easier to maintain.
-- We keep the main logic of methods clean, which also make them easier to maintain.
+- We keep the main logic of methods clean, which also makes them easier to maintain.
 
 Logging is only one typical aspect. Other common aspects include access control, statistics and so on.  
 
@@ -100,12 +100,12 @@ EasyAop::add_advice([
 ```
 
 ## Two types of advice
-There are before-advice and after-advice:
+There are before-advices and after-advices:
 ```php
 before@class_name::method_name
 after@class_name::method_name
 ```  
-Before-advice is attached to the beginning of the target code, while after-advice is attached to the end of the target code.
+Before-advices are attached to the beginning of the target code, while after-advices are attached to the end of the target code.
 
 ## Before-advice
 Before-advice is executed **after** the caller calls the callee and **before** the callee receives the arguments, which means:
@@ -147,7 +147,7 @@ EasyAop::add_advice(['after@sum'], function($joinpoint, $args, $ret) {
 
 sum(1, 2);
 ```
-The above code output NULL instead of 3. The reason is:
+The above code prints NULL instead of 3. The reason is:
 - The return value of sum(1, 2) is not assigned to other variables. It's unused, so the underlying engine of php discards the return value on optimization purpose.
 
 ## When to call EasyAop::add_advice?
