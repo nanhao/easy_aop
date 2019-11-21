@@ -209,7 +209,7 @@ after@div called
 ```
 
 ## Advice recursion
-Consider the following code:
+Advice recursion is not allowed. Consider the following code:
 ```php
 EasyAop::add_advice(['after@sum'], function($joinpoint, $args, $ret) {
     sum(3, 4);
