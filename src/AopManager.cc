@@ -71,12 +71,24 @@ namespace easy_aop
 
     vector<Advice*>* AopManager::get_advice_before(string where)
     {
-        return &_before[where];
+        auto iter = _before.find(where);
+
+        if (iter == _before.end()) {
+            return NULL;
+        }
+
+        return &(iter->second);
     }
 
     vector<Advice*>* AopManager::get_advice_after(string where)
     {
-        return &_after[where];
+        auto iter = _after.find(where);
+
+        if (iter == _after.end()) {
+            return NULL;
+        }
+
+        return &(iter->second);
     }
 
     void AopManager::call_advice(string joinpoint, Advice* p_advice)

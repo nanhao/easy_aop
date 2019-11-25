@@ -72,6 +72,10 @@ namespace easy_aop
 
         vector<easy_aop::Advice*>* p_advice_vector = p_manager->get_advice_before(func);
 
+        if (p_advice_vector == NULL) {
+            return;
+        }
+
         for (auto it = p_advice_vector->begin(); it != p_advice_vector->end(); ++it) {
             zval params[3];
 
@@ -102,6 +106,10 @@ namespace easy_aop
         easy_aop::AopManager* p_manager = ((easy_aop::AopManager*)EASY_AOP_G(p_manager));
 
         vector<easy_aop::Advice*>* p_advice_vector = p_manager->get_advice_after(func);
+
+        if (p_advice_vector == NULL) {
+            return;
+        }
 
         for (auto it = p_advice_vector->begin(); it != p_advice_vector->end(); ++it) {
             zval params[3];
