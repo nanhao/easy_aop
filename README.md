@@ -15,6 +15,7 @@ Easy_aop is a simple php7 extension for AOP (Aspect Oriented Programming), which
 [Namespace](#namespace)  
 [Arguments passing by reference](#arguments-passing-by-reference)  
 [Returning reference](#returning-reference)  
+[Exception](#exception)  
 
 ## What is AOP?
 Let's assume the following class:
@@ -287,3 +288,28 @@ Output:
 ```text
 int(3)
 ```
+
+## Exception
+If any exception is thrown in before-advices, a try statement starts at the first line of the target code will catch the exception:
+```php
+function test() {
+    try {
+        return 123;
+    }
+    catch (\Exception $e) {
+        echo $e->getMessage() . PHP_EOL;
+    }
+}
+
+EasyAop::add_advice(['before@test'], function($joinpoint, $args, &$ret) {
+    throw new \Exception('exception thrown in before-advice');
+});
+
+test();
+```
+Output:
+```text
+exception thrown in before-advice
+```
+However, if you change 'before@test' to 'after@test', the exception won't be catched.
+Because, before-advices are considered to be called from inside target code, while after-advices are considered to be called from the outside scope.
