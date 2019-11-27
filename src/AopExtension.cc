@@ -1,6 +1,7 @@
 #include "AopExtension.h"
 #include "AopManager.h"
 #include "php_internal.h"
+#include <iostream>
 
 namespace easy_aop
 {
@@ -54,7 +55,9 @@ namespace easy_aop
 
         AopExtension::call_before(func, &param_infos, execute_data);
         AopExtension::ori_zend_execute_ex(execute_data);
-        AopExtension::call_after(func, &param_infos, p_result);
+        if (!EG(exception)) {
+            AopExtension::call_after(func, &param_infos, p_result);
+        }
 
         for (auto iter = param_infos.begin(); iter != param_infos.end(); ++iter) {
             zval_ptr_dtor(&iter->val);
@@ -71,6 +74,10 @@ namespace easy_aop
         easy_aop::AopManager* p_manager = ((easy_aop::AopManager*)EASY_AOP_G(p_manager));
 
         vector<easy_aop::Advice*>* p_advice_vector = p_manager->get_advice_before(func);
+
+        if (p_advice_vector == NULL) {
+            return;
+        }
 
         for (auto it = p_advice_vector->begin(); it != p_advice_vector->end(); ++it) {
             zval params[3];
@@ -93,6 +100,8 @@ namespace easy_aop
             p_manager->call_advice(joinpoint, *it);
 
             zend_string_release(str_val);
+
+            Z_ARRVAL(params[1])->gc.refcount--;
             zend_array_destroy(Z_ARRVAL(params[1]));
         }
     }
@@ -102,6 +111,10 @@ namespace easy_aop
         easy_aop::AopManager* p_manager = ((easy_aop::AopManager*)EASY_AOP_G(p_manager));
 
         vector<easy_aop::Advice*>* p_advice_vector = p_manager->get_advice_after(func);
+
+        if (p_advice_vector == NULL) {
+            return;
+        }
 
         for (auto it = p_advice_vector->begin(); it != p_advice_vector->end(); ++it) {
             zval params[3];
@@ -128,6 +141,8 @@ namespace easy_aop
             p_manager->call_advice(joinpoint, *it);
 
             zend_string_release(str_val);
+
+            Z_ARRVAL(params[1])->gc.refcount--;
             zend_array_destroy(Z_ARRVAL(params[1]));
         }
     }
