@@ -311,5 +311,5 @@ Output:
 ```text
 exception thrown in before-advice
 ```
-However, if you change 'before@test' to 'after@test', the exception won't be catched.
+However, if you change 'before@test' to 'after@test', the exception won't be caught.
 Because, before-advices are considered to be called from inside target code, while after-advices are considered to be called from the outside scope.
