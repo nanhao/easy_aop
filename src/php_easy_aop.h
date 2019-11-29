@@ -12,6 +12,15 @@ extern "C" {
     #include "ext/standard/info.h"
 }
 
+#include <vector>
+using std::vector;
+
+typedef struct {
+    zend_execute_data* p_target;
+    zend_execute_data* p_before;
+    bool intercept;
+} BeforeAdviceCall;
+
 extern zend_module_entry easy_aop_module_entry;
 # define phpext_easy_aop_ptr &easy_aop_module_entry
 
@@ -25,6 +34,7 @@ ZEND_TSRMLS_CACHE_EXTERN()
 
 ZEND_BEGIN_MODULE_GLOBALS(easy_aop)
     void* p_manager; // easy_aop::AopManager*
+    vector<BeforeAdviceCall> advice_trace;
 ZEND_END_MODULE_GLOBALS(easy_aop)
 
 extern ZEND_DECLARE_MODULE_GLOBALS(easy_aop)
