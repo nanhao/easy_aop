@@ -53,10 +53,27 @@ namespace easy_aop
 
         zval* p_result = execute_data->return_value;
 
+        EASY_AOP_G(advice_trace).push_back(BeforeAdviceCall{
+            .p_target = EG(current_execute_data),
+            .p_before = NULL,
+            .intercept = 0
+        });
+
         AopExtension::call_before(func, &param_infos, execute_data);
-        AopExtension::ori_zend_execute_ex(execute_data);
-        if (!EG(exception)) {
-            AopExtension::call_after(func, &param_infos, p_result);
+
+        BeforeAdviceCall advice_call_info = EASY_AOP_G(advice_trace).back();
+        EASY_AOP_G(advice_trace).pop_back();
+
+        if (!advice_call_info.intercept) {
+            AopExtension::ori_zend_execute_ex(execute_data);
+
+            if (!EG(exception)) {
+                AopExtension::call_after(func, &param_infos, p_result);
+            }
+        } else {
+            //assert(execute_data == advice_call_info.p_target);
+            zend_vm_stack_free_args(execute_data);
+            zend_vm_stack_free_call_frame(execute_data);
         }
 
         for (auto iter = param_infos.begin(); iter != param_infos.end(); ++iter) {
@@ -99,10 +116,8 @@ namespace easy_aop
             (*it)->set_params(params);
             p_manager->call_advice(joinpoint, *it);
 
-            zend_string_release(str_val);
-
-            Z_ARRVAL(params[1])->gc.refcount--;
-            zend_array_destroy(Z_ARRVAL(params[1]));
+            zval_ptr_dtor(&params[0]);
+            zval_ptr_dtor(&params[1]);
         }
     }
 
@@ -140,10 +155,8 @@ namespace easy_aop
             (*it)->set_params(params);
             p_manager->call_advice(joinpoint, *it);
 
-            zend_string_release(str_val);
-
-            Z_ARRVAL(params[1])->gc.refcount--;
-            zend_array_destroy(Z_ARRVAL(params[1]));
+            zval_ptr_dtor(&params[0]);
+            zval_ptr_dtor(&params[1]);
         }
     }
 }

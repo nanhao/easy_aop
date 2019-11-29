@@ -36,6 +36,22 @@ PHP_METHOD(EasyAop, add_advice)
     p_manager->add_advice(joinpoint_names, new easy_aop::Advice(fci_advice, fcc_advice, p_closure));
 }
 
+PHP_METHOD(EasyAop, intercept)
+{
+    zend_execute_data* p_advice_execute_data = EASY_AOP_G(advice_trace).back().p_before;
+    zend_execute_data* p_target_execute_data = EASY_AOP_G(advice_trace).back().p_target;
+
+    if (execute_data->prev_execute_data != p_advice_execute_data) {
+        zend_error(E_ERROR, "EasyAop::intercept must be called inside before-advices");
+        return;
+    }
+
+    EASY_AOP_G(advice_trace).back().intercept = 1;
+
+    p_advice_execute_data->return_value = p_target_execute_data->return_value;
+    p_advice_execute_data->prev_execute_data = p_target_execute_data->prev_execute_data;
+}
+
 namespace easy_aop
 {
     void register_EasyAop()
@@ -45,8 +61,12 @@ namespace easy_aop
             ZEND_ARG_CALLABLE_INFO(0, advice, 0)
         ZEND_END_ARG_INFO()
 
+        ZEND_BEGIN_ARG_INFO_EX(arginfo_EasyAop_intercept, 0, 0, 0)
+        ZEND_END_ARG_INFO()
+
         zend_function_entry easy_aop_methods[] = {
             PHP_ME(EasyAop, add_advice, arginfo_EasyAop_add_advice, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
+            PHP_ME(EasyAop, intercept, arginfo_EasyAop_intercept, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
             PHP_FE_END
         };
 

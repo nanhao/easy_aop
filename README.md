@@ -1,5 +1,7 @@
+English | [中文](./README-CN.md)
+
 # easy_aop
-Easy_aop is a simple php7 extension for AOP (Aspect Oriented Programming), which allow you to attach a piece of code before/after a method or function in the easiest way.
+Easy_aop is a simple php7 extension for AOP (Aspect Oriented Programming), which allow you to attach a piece of code before/after a method or function in the easiest way. It also supports intercepting the target code.
 
 ## Document  
 
@@ -16,6 +18,7 @@ Easy_aop is a simple php7 extension for AOP (Aspect Oriented Programming), which
 [Arguments passing by reference](#arguments-passing-by-reference)  
 [Returning reference](#returning-reference)  
 [Exception](#exception)  
+[EasyAop::intercept](#easyaopintercept)
 
 ## What is AOP?
 Let's assume the following class:
@@ -313,3 +316,24 @@ exception thrown in before-advice
 ```
 However, if you change 'before@test' to 'after@test', the exception won't be caught.
 Because, before-advices are considered to be called from inside target code, while after-advices are considered to be called from the outside scope.
+
+
+## EasyAop::intercept
+You can intercept the target code by calling EasyAop::intercept() inside the before-advice. It will replace the target function/method with the before-advice.
+```php
+function sum($a, $b) {
+    return $a + $b;
+}
+
+EasyAop::add_advice(['before@sum'], function($joinpoint, $args, $ret) {
+    EasyAop::intercept();
+    return $args['a'] * $args['b'];
+});
+
+$ret = sum(5, 5);
+echo $ret;
+```
+Output:
+```text
+25
+```
