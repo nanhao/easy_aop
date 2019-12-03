@@ -55,7 +55,6 @@ namespace easy_aop
 
         EASY_AOP_G(advice_trace).push_back(BeforeAdviceCall{
             .p_target = EG(current_execute_data),
-            .p_before = NULL,
             .intercept = 0
         });
 

@@ -38,13 +38,8 @@ PHP_METHOD(EasyAop, add_advice)
 
 PHP_METHOD(EasyAop, intercept)
 {
-    zend_execute_data* p_advice_execute_data = EASY_AOP_G(advice_trace).back().p_before;
+    zend_execute_data* p_advice_execute_data = execute_data->prev_execute_data;
     zend_execute_data* p_target_execute_data = EASY_AOP_G(advice_trace).back().p_target;
-
-    if (execute_data->prev_execute_data != p_advice_execute_data) {
-        zend_error(E_ERROR, "EasyAop::intercept must be called inside before-advices");
-        return;
-    }
 
     EASY_AOP_G(advice_trace).back().intercept = 1;
 
