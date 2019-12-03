@@ -17,7 +17,6 @@ using std::vector;
 
 typedef struct {
     zend_execute_data* p_target;
-    zend_execute_data* p_before;
     bool intercept;
 } BeforeAdviceCall;
 
