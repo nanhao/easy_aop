@@ -18,10 +18,10 @@ namespace easy_aop
     public:
         static void (*ori_zend_execute_ex) (zend_execute_data *execute_data);
 
-        static int hook_minit();
-        static int hook_mshutdown();
-        static int hook_rinit();
-        static int hook_rshutdown();
+        static void hook_minit();
+        static void hook_mshutdown();
+        static void hook_rinit();
+        static void hook_rshutdown();
         static void minfo();
 
         ZEND_DLEXPORT static void easy_aop_execute_ex(zend_execute_data* execute_data);

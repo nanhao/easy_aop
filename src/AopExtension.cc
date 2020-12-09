@@ -7,29 +7,25 @@ namespace easy_aop
 {
     void (*AopExtension::ori_zend_execute_ex) (zend_execute_data *execute_data) = zend_execute_ex;
 
-    int AopExtension::hook_minit()
+    void AopExtension::hook_minit()
     {
         AopExtension::register_classes();
         zend_execute_ex = AopExtension::easy_aop_execute_ex;
-        return SUCCESS;
     }
 
-    int AopExtension::hook_mshutdown()
+    void AopExtension::hook_mshutdown()
     {
         zend_execute_ex = AopExtension::ori_zend_execute_ex;
-        return SUCCESS;
     }
 
-    int AopExtension::hook_rinit()
+    void AopExtension::hook_rinit()
     {
         EASY_AOP_G(p_manager) = (void*)new AopManager();
-        return SUCCESS;
     }
 
-    int AopExtension::hook_rshutdown()
+    void AopExtension::hook_rshutdown()
     {
         delete (easy_aop::AopManager*)EASY_AOP_G(p_manager);
-        return SUCCESS;
     }
 
     void AopExtension::minfo()
