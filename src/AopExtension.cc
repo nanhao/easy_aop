@@ -50,12 +50,7 @@ namespace easy_aop
         vector<param_info> param_infos;
         easy_aop::collect_params(&param_infos, execute_data);
 
-        EASY_AOP_G(advice_trace).push_back(BeforeAdviceCall{.p_target = EG(current_execute_data), .intercept = 0});
-
         AopExtension::call_before(func, &param_infos, execute_data);
-
-        BeforeAdviceCall advice_call_info = EASY_AOP_G(advice_trace).back();
-        EASY_AOP_G(advice_trace).pop_back();
     }
 
     void AopExtension::observer_end(zend_execute_data *execute_data, zval *return_value)
@@ -63,8 +58,14 @@ namespace easy_aop
         string func = easy_aop::get_function_name(execute_data);
         vector<param_info> param_infos;
         easy_aop::collect_params(&param_infos, execute_data);
-
-        AopExtension::call_after(func, &param_infos, return_value);
+        if (!EG(exception))
+        {
+            AopExtension::call_after(func, &param_infos, return_value);
+        }
+        for (auto iter = param_infos.begin(); iter != param_infos.end(); ++iter)
+        {
+            zval_ptr_dtor(&iter->val);
+        }
     }
 
     ZEND_DLEXPORT zend_observer_fcall_handlers AopExtension::easy_aop_execute_ex(zend_execute_data *execute_data)
