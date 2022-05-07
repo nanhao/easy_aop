@@ -5,7 +5,9 @@
 
 namespace easy_aop
 {
-    // void (*AopExtension::ori_zend_execute_ex)(zend_execute_data *execute_data) = zend_execute_ex;
+#if PHP_VERSION_ID < 80000
+    void (*AopExtension::ori_zend_execute_ex)(zend_execute_data *execute_data) = zend_execute_ex;
+#endif
 
     void AopExtension::hook_minit()
     {
@@ -62,8 +64,7 @@ namespace easy_aop
         vector<param_info> param_infos;
         easy_aop::collect_params(&param_infos, execute_data);
 
-        zval *p_result = execute_data->return_value;
-        AopExtension::call_after(func, &param_infos, p_result);
+        AopExtension::call_after(func, &param_infos, return_value);
     }
 
     ZEND_DLEXPORT zend_observer_fcall_handlers AopExtension::easy_aop_execute_ex(zend_execute_data *execute_data)
