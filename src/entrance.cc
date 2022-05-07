@@ -8,22 +8,26 @@ ZEND_DECLARE_MODULE_GLOBALS(easy_aop)
 
 PHP_MINIT_FUNCTION(easy_aop)
 {
-    return AopExtension::hook_minit();
+    AopExtension::hook_minit();
+	return SUCCESS;
 }
 
 PHP_MSHUTDOWN_FUNCTION(easy_aop)
 {
-    return AopExtension::hook_mshutdown();
+    AopExtension::hook_mshutdown();
+	return SUCCESS;
 }
 
 PHP_RINIT_FUNCTION(easy_aop)
 {
-    return AopExtension::hook_rinit();
+    AopExtension::hook_rinit();
+	return SUCCESS;
 }
 
 PHP_RSHUTDOWN_FUNCTION(easy_aop)
 {
-    return AopExtension::hook_rshutdown();
+    AopExtension::hook_rshutdown();
+	return SUCCESS;
 }
 
 PHP_MINFO_FUNCTION(easy_aop)
